@@ -27,6 +27,11 @@ public class TodoController {
         return todoRepository.findAll();
     }
 
+    @GetMapping("/test")
+    public String getTest() {
+        return "Test!";
+    }
+
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public Todo createTodo(@RequestBody Todo todo) {
