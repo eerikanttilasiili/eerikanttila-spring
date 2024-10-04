@@ -31,11 +31,11 @@ jobs:
           node-version: "16"
 
       - name: Install frontend dependencies
-        working-directory: ./src/main/frontend
+        working-directory: ./frontend
         run: npm install
 
       - name: Build frontend
-        working-directory: ./src/main/frontend
+        working-directory: ./frontend
         run: npm run build
 
       - name: Upload artifact for deployment job
