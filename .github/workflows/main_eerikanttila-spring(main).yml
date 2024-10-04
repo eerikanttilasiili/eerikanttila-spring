@@ -38,15 +38,10 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-      - name: Create frontend directory on Azure
+      - name: Create a zip of the frontend build artifacts
         run: |
-          az webapp ssh --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --command "mkdir -p /site/wwwroot/frontend/build"
-
-      - name: Upload frontend build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-build
-          path: ./frontend/build
+          cd ./frontend/build
+          zip -r ../../frontend-build.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -62,19 +57,14 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download frontend build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-build
-
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: java-app
 
-      - name: Deploy frontend to Azure Web App
+      - name: Create frontend and build directories in Azure
         run: |
-          az webapp deployment source config-zip --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --src ./frontend/build.zip
+          az webapp ssh --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --command "mkdir -p /site/wwwroot/frontend/build"
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -82,5 +72,9 @@ jobs:
         with:
           app-name: "eerikanttila-spring"
           slot-name: "main"
-          package: "*.jar"
+          package: frontend-build.zip # Change this to use the created zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C6AE559666A34B5CB73DA7E00D521A3A }}
+
+      - name: Extract frontend build files
+        run: |
+          az webapp ssh --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --command "unzip -o /site/wwwroot/frontend-build.zip -d /site/wwwroot/frontend"
