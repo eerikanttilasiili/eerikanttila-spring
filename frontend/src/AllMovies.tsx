@@ -9,7 +9,6 @@ import {
     Chip,
     Box,
     TextField,
-    Button
 } from '@mui/material';
 
 const AllMovies = () => {
@@ -28,7 +27,7 @@ const AllMovies = () => {
     return (
         <Container maxWidth="md" component="main" sx={{ padding: '2rem 0' }}>
         <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', color: 'chocolate' }}>
-          My All Todos will be listed here
+          My TODOS
         </Typography>
   
         <TextField

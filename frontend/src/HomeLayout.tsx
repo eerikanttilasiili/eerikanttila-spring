@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, useOutlet } from "react-router-dom";
+import { useOutlet } from "react-router-dom";
 import TopBar from "./TopBar";
 
 export const HomeLayout = () => {

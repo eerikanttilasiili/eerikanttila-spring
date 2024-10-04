@@ -6,7 +6,6 @@ import {
     Button,
     Typography,
     Box,
-    MenuItem
 } from '@mui/material';
 import { useMovieContext } from './MovieContext';
 
