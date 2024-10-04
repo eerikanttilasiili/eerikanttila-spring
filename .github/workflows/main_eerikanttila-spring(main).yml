@@ -64,7 +64,7 @@ jobs:
 
       - name: Create frontend and build directories in Azure
         run: |
-          az webapp ssh --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --command "mkdir -p /site/wwwroot/frontend/build"
+          az webapp deploy --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --src-path ./frontend-build.zip --slot main --target-path /site/wwwroot/frontend
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
