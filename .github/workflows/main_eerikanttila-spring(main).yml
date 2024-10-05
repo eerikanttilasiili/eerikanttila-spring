@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy JAR app to Azure Web App - eerikanttila-spring
 
 on:
@@ -36,7 +33,12 @@ jobs:
 
       - name: Build frontend
         working-directory: ./frontend
-        run: npm run build
+        run: npm run build-for-azure
+
+      # List the contents of the frontend build directory
+      - name: List frontend build directory
+        working-directory: ./frontend
+        run: ls -la build
 
       # Upload the built JAR file
       - name: Upload JAR artifact
@@ -50,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build
-          path: "./frontend/build/**" # Adjust this path if necessary
+          path: "./frontend/build/**" # Ensure this path is correct
 
   deploy:
     runs-on: ubuntu-latest
