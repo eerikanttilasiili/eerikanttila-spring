@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore Spring Boot resources static folder
+/src/main/resources/static/
