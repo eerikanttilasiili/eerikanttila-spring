@@ -27,7 +27,7 @@ const AllMovies = () => {
     return (
         <Container maxWidth="md" component="main" sx={{ padding: '2rem 0' }}>
         <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', color: 'chocolate' }}>
-          Current TODOS are here:
+          Current TODOS
         </Typography>
   
         <TextField
