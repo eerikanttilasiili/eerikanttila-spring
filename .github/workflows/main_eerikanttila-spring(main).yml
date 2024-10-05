@@ -16,6 +16,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # or whatever version you prefer
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend # change to your frontend directory
+
+      # Build the React app
+      - name: Build React app
+        run: npm run build-for-azure
+        working-directory: ./frontend # change to your frontend directory
+
+      # Copy built files to Spring's resources/static
+      - name: Copy build files
+        run: |
+          mkdir -p ./src/main/resources/static
+          cp -r ./frontend/build/* ./src/main/resources/static
+        working-directory: ${{ github.workspace }}
+
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
@@ -24,33 +47,6 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-
-      - name: Install frontend dependencies
-        working-directory: ./frontend
-        run: npm install
-
-      - name: Build frontend
-        working-directory: ./frontend
-        run: npm run build
-
-      # Create the static directory if it doesn't exist
-      - name: Create static directory
-        run: |
-          mkdir -p ../src/main/resources/static
-          echo "Checking contents of static directory:"
-          ls -la ../src/main/resources/static
-
-      # Copy built frontend files to the static directory
-      - name: Copy frontend build files
-        run: |
-          cp -r ../frontend/build/* ../src/main/resources/static/
-          echo "Files copied to static directory:"
-          ls -la ../src/main/resources/static
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
