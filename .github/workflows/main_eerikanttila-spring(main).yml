@@ -33,7 +33,7 @@ jobs:
 
       - name: Build frontend
         working-directory: ./frontend
-        run: npm run build-for-azure
+        run: npm run build
 
       # List the contents of the frontend build directory
       - name: List frontend build directory
