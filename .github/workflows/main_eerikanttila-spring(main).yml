@@ -39,11 +39,13 @@ jobs:
         run: |
           BUILD_PATH=../src/main/resources/static npm run build || { echo "Frontend build failed"; exit 1; }
           echo "Frontend build completed. Listing directory contents:"
-          ls -la ../src/main/resources/static  # List files to check if they exist
+          ls -la ../src/main/resources/static  # Check if files are present here
 
       - name: Prepare frontend build for upload
         run: |
           mkdir -p frontend-build
+          echo "Checking contents of static directory for copying files:"
+          ls -la ../src/main/resources/static  # Verify the contents before copying
           cp -r ../src/main/resources/static/* frontend-build/ || { echo "No files found to copy"; exit 1; }
 
       - name: Upload artifact for deployment job
