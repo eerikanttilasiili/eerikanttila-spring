@@ -36,29 +36,27 @@ jobs:
 
       - name: Build frontend
         working-directory: ./frontend
-        run: |
-          BUILD_PATH=../src/main/resources/static npm run build || { echo "Frontend build failed"; exit 1; }
-          echo "Frontend build completed. Listing directory contents:"
-          ls -la ../src/main/resources/static  # Check if files are present here
+        run: npm run build
 
-      - name: Prepare frontend build for upload
+      # Create the static directory if it doesn't exist
+      - name: Create static directory
         run: |
-          mkdir -p frontend-build
-          echo "Checking contents of static directory for copying files:"
-          ls -la ../src/main/resources/static  # Verify the contents before copying
-          cp -r ../src/main/resources/static/* frontend-build/ || { echo "No files found to copy"; exit 1; }
+          mkdir -p ../src/main/resources/static
+          echo "Checking contents of static directory:"
+          ls -la ../src/main/resources/static
+
+      # Copy built frontend files to the static directory
+      - name: Copy frontend build files
+        run: |
+          cp -r ../frontend/build/* ../src/main/resources/static/
+          echo "Files copied to static directory:"
+          ls -la ../src/main/resources/static
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
           path: "${{ github.workspace }}/target/*.jar"
-
-      - name: Upload frontend build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-build
-          path: frontend-build/** # Upload from the prepared directory
 
   deploy:
     runs-on: ubuntu-latest
@@ -73,11 +71,6 @@ jobs:
         with:
           name: java-app
 
-      - name: Download frontend build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-build
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -86,8 +79,3 @@ jobs:
           slot-name: "main"
           package: "*.jar"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C6AE559666A34B5CB73DA7E00D521A3A }}
-
-      - name: Deploy frontend build
-        run: |
-          echo "Deploying frontend build..."
-          az webapp deploy --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --src-path frontend-build --slot main --target-path /site/wwwroot/frontend --type zip
