@@ -36,12 +36,7 @@ jobs:
 
       - name: Build frontend
         working-directory: ./frontend
-        run: npm run build
-
-      - name: Create a zip of the frontend build artifacts
-        run: |
-          cd ./frontend/build
-          zip -r ../../frontend-build.zip .
+        run: npm run build-for-azure
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -62,19 +57,11 @@ jobs:
         with:
           name: java-app
 
-      - name: Create frontend and build directories in Azure
-        run: |
-          az webapp deploy --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --src-path ./frontend-build.zip --slot main --target-path /site/wwwroot/frontend
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: "eerikanttila-spring"
           slot-name: "main"
-          package: frontend-build.zip # Change this to use the created zip
+          package: "*.jar"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C6AE559666A34B5CB73DA7E00D521A3A }}
-
-      - name: Extract frontend build files
-        run: |
-          az webapp ssh --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --command "unzip -o /site/wwwroot/frontend-build.zip -d /site/wwwroot/frontend"
