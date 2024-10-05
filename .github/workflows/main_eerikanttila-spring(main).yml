@@ -32,13 +32,6 @@ jobs:
         run: npm run build-for-azure
         working-directory: ./frontend # change to your frontend directory
 
-      # Copy built files to Spring's resources/static
-      - name: Copy build files
-        run: |
-          mkdir -p ./src/main/resources/static
-          cp -r ./frontend/build/* ./src/main/resources/static
-        working-directory: ${{ github.workspace }}
-
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
