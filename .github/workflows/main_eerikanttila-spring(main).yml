@@ -41,6 +41,11 @@ jobs:
           echo "Build completed. Listing directory contents:"
           ls -la ../src/main/resources/static  # Ensure correct path to the static folder
 
+      - name: Prepare frontend build for upload
+        run: |
+          mkdir -p frontend-build
+          cp -r ../src/main/resources/static/* frontend-build/
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -51,7 +56,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build
-          path: "../src/main/resources/static/**" # Adjusted path to the static build files
+          path: frontend-build/** # Upload from the prepared directory
 
   deploy:
     runs-on: ubuntu-latest
@@ -83,4 +88,4 @@ jobs:
       - name: Deploy frontend build
         run: |
           echo "Deploying frontend build..."
-          az webapp deploy --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --src-path ../src/main/resources/static --slot main --target-path /site/wwwroot/frontend --type zip
+          az webapp deploy --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --src-path frontend-build --slot main --target-path /site/wwwroot/frontend --type zip
