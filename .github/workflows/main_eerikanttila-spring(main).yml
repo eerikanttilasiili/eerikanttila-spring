@@ -37,9 +37,9 @@ jobs:
       - name: Build frontend
         working-directory: ./frontend
         run: |
-          npm run build || { echo "Frontend build failed"; exit 1; }
+          BUILD_PATH=../src/main/resources/static npm run build || { echo "Frontend build failed"; exit 1; }
           echo "Build completed. Listing directory contents:"
-          ls -la ./build
+          ls -la ../src/main/resources/static  # Ensure correct path to the static folder
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build
-          path: "./frontend/build/**"
+          path: "../src/main/resources/static/**" # Adjusted path to the static build files
 
   deploy:
     runs-on: ubuntu-latest
@@ -83,4 +83,4 @@ jobs:
       - name: Deploy frontend build
         run: |
           echo "Deploying frontend build..."
-          az webapp deploy --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --src-path ./frontend/build --slot main --target-path /site/wwwroot/frontend --type zip
+          az webapp deploy --name eerikanttila-spring --resource-group eerikanttila-sandbox-rg --src-path ../src/main/resources/static --slot main --target-path /site/wwwroot/frontend --type zip
