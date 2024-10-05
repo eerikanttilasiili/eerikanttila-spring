@@ -36,13 +36,21 @@ jobs:
 
       - name: Build frontend
         working-directory: ./frontend
-        run: npm run build-for-azure
+        run: npm run build
 
-      - name: Upload artifact for deployment job
+      # Upload the built JAR file
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: java-app
           path: "${{ github.workspace }}/target/*.jar"
+
+      # Upload the built frontend files
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: "./frontend/build/**" # Adjust this path if necessary
 
   deploy:
     runs-on: ubuntu-latest
@@ -52,12 +60,20 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
+      # Download the JAR artifact
+      - name: Download JAR artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
 
-      - name: Deploy to Azure Web App
+      # Download the frontend artifact
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+
+      # Deploy JAR file
+      - name: Deploy JAR to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
@@ -65,3 +81,10 @@ jobs:
           slot-name: "main"
           package: "*.jar"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C6AE559666A34B5CB73DA7E00D521A3A }}
+
+      # Deploy frontend build
+      - name: Deploy frontend to Azure Web App
+        run: |
+          # Unzip and deploy frontend build files to the desired path
+          mkdir -p /site/wwwroot/frontend
+          unzip frontend-build.zip -d /site/wwwroot/frontend
