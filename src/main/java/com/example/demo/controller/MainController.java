@@ -21,11 +21,21 @@ public class MainController {
     public ResponseEntity<Resource> serveIndex() {
         logger.info("Serving React app index.html");
 
-        Resource resource = new ClassPathResource("static/index.html");
+        try {
+            Resource resource = new ClassPathResource("static/index.html");
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, "text/html")
-                .body(resource);
+            if (!resource.exists()) {
+                logger.error("index.html not found in static directory");
+                return ResponseEntity.notFound().build();
+            }
 
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, "text/html")
+                    .body(resource);
+
+        } catch (Exception e) {
+            logger.error("Error while serving index.html: ", e);
+            return ResponseEntity.status(500).build();
+        }
     }
 }
