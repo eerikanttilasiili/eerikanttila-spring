@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/todos")
 public class TodoController {
 
     private final TodoRepository todoRepository;
@@ -21,16 +21,20 @@ public class TodoController {
         this.todoRepository = todoRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping({ "", "/" })
     public Iterable<Todo> getTodos() {
         logger.info("Fetching all todos!");
         return todoRepository.findAll();
     }
 
-    @PostMapping("/")
+    @GetMapping("/test")
+    public String getTest() {
+        return "Test!";
+    }
+
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Todo createTodo(@RequestBody Todo todo) {
         return todoRepository.save(todo);
     }
-
 }
