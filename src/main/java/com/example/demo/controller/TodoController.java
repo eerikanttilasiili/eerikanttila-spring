@@ -29,7 +29,7 @@ public class TodoController {
 
     @GetMapping("/test")
     public String getTest() {
-        return "Test!";
+        return "Dev!";
     }
 
     @PostMapping
