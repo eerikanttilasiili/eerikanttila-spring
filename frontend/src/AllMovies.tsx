@@ -1,27 +1,16 @@
-import React, { useState } from 'react';
-import { useMovieContext } from './MovieContext';
+import { useState } from 'react';
+//import { useMovieContext } from './MovieContext';
 import {
     Container,
-    Grid,
-    Card,
-    CardContent,
     Typography,
-    Chip,
-    Box,
-    TextField,
     Button
 } from '@mui/material';
 
 const AllMovies = () => {
-    const { movies } = useMovieContext();
-
-    // State for search input
-    const [searchTerm, setSearchTerm] = useState('');
-    
-    // State for fetched message
+    //const { movies } = useMovieContext();
+    //const [searchTerm, setSearchTerm] = useState('');
     const [message, setMessage] = useState('');
 
-    // Function to fetch message
     const fetchMessage = async () => {
         try {
             const response = await fetch('https://4.180.6.30/');
@@ -31,14 +20,13 @@ const AllMovies = () => {
             setMessage('Failed to fetch the message.');
         }
     };
-
-    // Filter movies by name:
+/*
     const filteredMovies = searchTerm
         ? movies.filter((movie) =>
             movie?.name?.includes(searchTerm)
           )
         : movies; // List all movies if no search term
-
+*/
     return (
         <Container maxWidth="md" component="main" sx={{ padding: '2rem 0' }}>
           <Button
