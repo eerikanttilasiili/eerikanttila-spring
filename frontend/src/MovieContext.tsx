@@ -4,12 +4,16 @@ type MovieContextType = {
     movies: any[];
     setMovies: React.Dispatch<React.SetStateAction<any[]>>;
     addMovie: (newMovie: any) => Promise<void>;
+    message: string;
+    getMessage: () => Promise<void>;
 };
 
 export const MovieContext = createContext<MovieContextType>({
     movies: [],
     setMovies: () => {},
     addMovie: async (newMovie: any) => {},
+    message: '',
+    getMessage: async () => {},
 });
 
 // Hook to access context
@@ -17,6 +21,24 @@ export const useMovieContext = () => useContext(MovieContext);
 
 export const MovieContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [movies, setMovies] = useState<any[]>([]);
+    const [message, setMessage] = useState<string>('');
+
+    const getMessage = useCallback(async () => {
+        try {
+            const response = await fetch(`/api/todos/message`, {
+                method: 'GET',
+            });
+            if (response.status === 200) {
+                const messageJson = await response.json();
+                setMessage(messageJson.message);
+            } else {
+                console.error('Error! Please retry...');
+            }
+        } catch (e) {
+            console.log('Error: ', e);
+            throw new Error((e as Error).message);
+        }
+    }, []);
 
     const getMovies = useCallback(async () => {
         try {
@@ -62,7 +84,7 @@ export const MovieContextProvider = ({ children }: { children: React.ReactNode }
     }, [getMovies]);
 
     return (
-        <MovieContext.Provider value={{ movies, setMovies, addMovie }}>
+        <MovieContext.Provider value={{ movies, setMovies, addMovie, getMessage, message }}>
             {children}
         </MovieContext.Provider>
     );

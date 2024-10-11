@@ -1,5 +1,4 @@
-import { useState } from 'react';
-//import { useMovieContext } from './MovieContext';
+import { useMovieContext } from './MovieContext';
 import {
     Container,
     Typography,
@@ -7,19 +6,8 @@ import {
 } from '@mui/material';
 
 const AllMovies = () => {
-    //const { movies } = useMovieContext();
+    const { message, getMessage } = useMovieContext();
     //const [searchTerm, setSearchTerm] = useState('');
-    const [message, setMessage] = useState('');
-
-    const fetchMessage = async () => {
-        try {
-            const response = await fetch('https://4.180.6.30/');
-            const data = await response.json(); // Parse the response as JSON
-            setMessage(data.message); // Extract the "message" field
-        } catch (error) {
-            setMessage('Failed to fetch the message.');
-        }
-    };
 /*
     const filteredMovies = searchTerm
         ? movies.filter((movie) =>
@@ -32,7 +20,7 @@ const AllMovies = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={fetchMessage}
+            onClick={getMessage}
             sx={{ display: 'block', margin: '0 auto', marginBottom: '2rem' }}
           >
             Fetch message
