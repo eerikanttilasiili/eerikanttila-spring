@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 
 const AllMovies = () => {
-    const { message, getMessage } = useMovieContext();
+    const { message, getMessage, todos, getTodos, } = useMovieContext();
     //const [searchTerm, setSearchTerm] = useState('');
 /*
     const filteredMovies = searchTerm
@@ -25,12 +25,21 @@ const AllMovies = () => {
           >
             Fetch message!
           </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={getTodos}
+            sx={{ display: 'block', margin: '0 auto', marginBottom: '2rem' }}
+          >
+            Get todos!
+          </Button>
 
-          {message && (
-            <Typography variant="body1" sx={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <><Typography variant="body1" sx={{ textAlign: 'center', marginBottom: '2rem' }}>
               {message}
             </Typography>
-          )}
+            <Typography variant="body1" sx={{ textAlign: 'center', marginBottom: '2rem' }}>
+                {JSON.stringify(todos)}
+            </Typography></>
           {/*
           <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', color: 'chocolate' }}>
             Current TODOS here:

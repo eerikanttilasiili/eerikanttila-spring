@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.Todo;
 import com.example.demo.repository.TodoRepository;
+
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,9 +31,16 @@ public class TodoController {
     }
 
     @GetMapping({ "", "/" })
-    public Iterable<Todo> getTodos() {
+    public ResponseEntity<Map<String, Iterable<Todo>>> getTodos() {
         logger.info("Fetching all todos!");
-        return todoRepository.findAll();
+
+        Iterable<Todo> todos = todoRepository.findAll();
+
+        // Wrap the todos in a map with the key "todos"
+        Map<String, Iterable<Todo>> response = new HashMap<>();
+        response.put("todos", todos);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/test")

@@ -1,19 +1,19 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 type MovieContextType = {
-    movies: any[];
     setMovies: React.Dispatch<React.SetStateAction<any[]>>;
-    addMovie: (newMovie: any) => Promise<void>;
     message: string;
     getMessage: () => Promise<void>;
+    todos: any[];
+    getTodos: () => Promise<void>;
 };
 
 export const MovieContext = createContext<MovieContextType>({
-    movies: [],
     setMovies: () => {},
-    addMovie: async (newMovie: any) => {},
     message: '',
     getMessage: async () => {},
+    todos: [],
+    getTodos: async () => {},
 });
 
 // Hook to access context
@@ -22,6 +22,7 @@ export const useMovieContext = () => useContext(MovieContext);
 export const MovieContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [movies, setMovies] = useState<any[]>([]);
     const [message, setMessage] = useState<string>('');
+    const [todos, setTodos] = useState<any[]>([]);
 
     const getMessage = useCallback(async () => {
         try {
@@ -40,14 +41,14 @@ export const MovieContextProvider = ({ children }: { children: React.ReactNode }
         }
     }, []);
 
-    const getMovies = useCallback(async () => {
+    const getTodos = useCallback(async () => {
         try {
-            const response = await fetch(`/api/movies`, {
+            const response = await fetch(`/api/todos`, {
                 method: 'GET',
             });
             if (response.status === 200) {
-                const moviesJson = await response.json();
-                setMovies(moviesJson);
+                const todosJson = await response.json();
+                setTodos(todosJson.todos);
             } else {
                 console.error('Error! Please retry...');
             }
@@ -57,34 +58,12 @@ export const MovieContextProvider = ({ children }: { children: React.ReactNode }
         }
     }, []);
 
-    const addMovie = useCallback(async (newMovie: any) => {
-        try {
-            const response = await fetch('/api/movies', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newMovie),
-            });
-    
-            if (response.ok) {
-                const addedMovie = await response.json();
-                console.log('Movie added successfully:', addedMovie);
-                setMovies(prevMovies => [...prevMovies, addedMovie]);
-            } else {
-                console.error('Failed to add movie:', response.status, response.statusText);
-            }
-        } catch (e) {
-            console.log('Error: ', e);
-        }
-    }, []);
-
     useEffect(() => {
         //getMovies();
-    }, [getMovies]);
+    }, [getTodos]);
 
     return (
-        <MovieContext.Provider value={{ movies, setMovies, addMovie, getMessage, message }}>
+        <MovieContext.Provider value={{ setMovies, getMessage, message, getTodos, todos }}>
             {children}
         </MovieContext.Provider>
     );
