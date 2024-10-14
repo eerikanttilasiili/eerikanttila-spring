@@ -59,8 +59,8 @@ export const MovieContextProvider = ({ children }: { children: React.ReactNode }
     }, []);
 
     useEffect(() => {
-        //getMovies();
-    }, [getTodos]);
+        console.log('Movies:', movies);
+    }, [movies]);
 
     return (
         <MovieContext.Provider value={{ setMovies, getMessage, message, getTodos, todos }}>
