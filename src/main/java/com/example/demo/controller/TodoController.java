@@ -55,7 +55,7 @@ public class TodoController {
         logger.info("Received request from IP: {}", clientIp);
 
         // Fetch the message from the external endpoint
-        String externalMessage = restTemplate.getForObject("http://4.180.6.30/", String.class);
+        String externalMessage = restTemplate.getForObject("http://10.0.2.4/", String.class);
 
         // Return the fetched message directly as a JSON response
         return ResponseEntity.ok(externalMessage); // This assumes externalMessage is already in JSON format
