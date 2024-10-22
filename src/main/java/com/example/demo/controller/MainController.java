@@ -19,7 +19,7 @@ public class MainController {
 
     @GetMapping(value = { "/", "{path:^(?!api).*}" })
     public ResponseEntity<Resource> serveIndex() {
-        logger.info("Serving React app index.html");
+        logger.info("Serving React app index.html right now...");
 
         try {
             Resource resource = new ClassPathResource("static/index.html");
