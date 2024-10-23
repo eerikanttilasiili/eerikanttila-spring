@@ -1,28 +1,37 @@
-name: Build and Push Docker Image
-
+name: build and deploy spring-api
 on:
   push:
     branches:
       - main
 
 jobs:
-  build:
+  build-deploy:
+    name: build and deploy spring-api
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Build Docker image
+      - name: build the app
         run: |
-          docker build -t eaxpost/demo:latest .
+          mvn clean
+          mvn -B package --file pom.xml
 
-      - name: Log in to Docker Hub
+      - name: build the docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          dockerfile: Dockerfile
+          push: false
+          tags: eaxpost/rest-api:v1.0.0
+
+      - name: login to docker hub
         uses: docker/login-action@v1
         with:
           username: eaxpost
           password: Dockerpassword12!
 
-      - name: Push Docker image
-        run: |
-          docker push eaxpost/demo:latest
+      - name: push the docker image to docker hub
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          dockerfile: Dockerfile
+          push: true
+          tags: eaxpost/rest-api:v1.0.0
