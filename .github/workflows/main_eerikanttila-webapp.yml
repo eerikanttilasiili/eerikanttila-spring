@@ -53,18 +53,13 @@ jobs:
           push: true
           tags: eaxpost/demo:latest
 
-      # Deploy to Azure Web App:
-      - name: "Deploy to Azure Web App"
-        uses: azure/webapps-deploy@v2
+      # Login to Azure CLI
+      - name: "Login to Azure CLI"
+        uses: azure/login@v1
         with:
-          app-name: "eerikanttila-webapp"
-          slot-name: "production"
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: "eaxpost/demo:latest"
+          creds: ${{ secrets.AZURE_CREDENTIALS }} # Use the secret for authentication
 
-      # Restart the Azure Web App:
+      # Restart the Azure Web App
       - name: "Restart Azure Web App"
         run: |
           az webapp restart --name eerikanttila-webapp --resource-group eerikanttila-sandbox-rg
-        env:
-          AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
