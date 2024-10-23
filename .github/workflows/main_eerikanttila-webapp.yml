@@ -11,6 +11,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend
+
+      # Build the React app
+      - name: Build React app
+        run: npm run build-for-azure
+        working-directory: ./frontend
+
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
