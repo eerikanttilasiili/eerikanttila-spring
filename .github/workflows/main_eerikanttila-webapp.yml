@@ -5,10 +5,9 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -28,42 +27,44 @@ jobs:
         run: npm run build-for-azure
         working-directory: ./frontend
 
-      # Set up JDK
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: "17"
           distribution: "adopt"
 
-      # Build with Maven
       - name: Build with Maven
         run: mvn clean package
 
-      # Login to Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: eaxpost # Your Docker Hub username
-          password: Dockerpassword12! # Your Docker Hub password (consider using GitHub Secrets in real deployment)
+          username: eaxpost
+          password: Dockerpassword12!
 
-      # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Build and push Docker image to Docker Hub
-      - name: Build and push Docker image
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
           push: true
-          tags: eaxpost/demo:latest # Update with your Docker image tag
+          tags: eaxpost/demo:latest
 
-      # Deploy Docker image to Azure Web App using Docker Hub
+      # Deploy to Azure Web App
       - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "eerikanttila-webapp" # Your Azure Web App name
-          slot-name: "production" # The deployment slot (default is 'production')
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} # Use the publish profile for authentication
-          images: "eaxpost/demo:latest" # Docker Hub image name with tag
+          app-name: "eerikanttila-webapp"
+          slot-name: "production"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: "eaxpost/demo:latest"
+
+      # Restart the Azure Web App
+      - name: "Restart Azure Web App"
+        run: |
+          az webapp restart --name eerikanttila-webapp --resource-group eerikanttila-sandbox-rg
+        env:
+          AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
