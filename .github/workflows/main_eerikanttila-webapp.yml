@@ -1,51 +1,33 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy container app to Azure Web App - eerikanttila-webapp
+name: Build and Push Docker Image
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+
+      - name: Build Docker image
+        run: |
+          docker build -t eaxpost/demo:latest .
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v1
         with:
-          registry: https://index.docker.io/v1/
-          username: eaxpost
-          password: Dockerpassword12!
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push container image to Docker Hub
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: index.docker.io/eaxpost/demo:${{ github.sha }}
-          file: ./Dockerfile
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: production
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: "eerikanttila-webapp"
-          slot-name: "production"
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_421b0343d7964e4d9dddc985f0d91778 }}
-          images: "index.docker.io/eaxpost/demo:${{ github.sha }}"
+      - name: Push Docker image
+        run: |
+          docker push eaxpost/demo:latest
