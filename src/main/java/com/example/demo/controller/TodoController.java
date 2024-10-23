@@ -45,7 +45,7 @@ public class TodoController {
 
     @GetMapping("/test")
     public String getTest() {
-        return "Main!";
+        return "This is main!";
     }
 
     @GetMapping("/message")
