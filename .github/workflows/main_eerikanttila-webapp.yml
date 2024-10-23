@@ -11,41 +11,41 @@ on:
 
 jobs:
   build:
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Log in to registry
-      uses: docker/login-action@v2
-      with:
-        registry: https://index.docker.io/v1/
-        username: ${{ secrets.AzureAppService_ContainerUsername_0cf5f7693706448a8b53c6e1a56bab55 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_848461926876491d9631e99fb8e9ab07 }}
+      - name: Log in to registry
+        uses: docker/login-action@v2
+        with:
+          registry: https://index.docker.io/v1/
+          username: eaxpost
+          password: Dockerpassword12!
 
-    - name: Build and push container image to registry
-      uses: docker/build-push-action@v3
-      with:
-        push: true
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_0cf5f7693706448a8b53c6e1a56bab55 }}/demo:${{ github.sha }}
-        file: ./Dockerfile
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: index.docker.io/eaxpost/demo:${{ github.sha }}
+          file: ./Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'production'
+      name: "production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Deploy to Azure Web App
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'eerikanttila-webapp'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_421b0343d7964e4d9dddc985f0d91778 }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_0cf5f7693706448a8b53c6e1a56bab55 }}/demo:${{ github.sha }}'
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "eerikanttila-webapp"
+          slot-name: "production"
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_421b0343d7964e4d9dddc985f0d91778 }}
+          images: "index.docker.io/eaxpost/demo:${{ github.sha }}"
