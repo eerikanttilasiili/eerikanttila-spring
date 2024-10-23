@@ -23,7 +23,7 @@ const AllMovies = () => {
             onClick={getMessage}
             sx={{ display: 'block', margin: '0 auto', marginBottom: '2rem' }}
           >
-            Fetch message for Main app
+            Main app Fetch message
           </Button>
           <Button
             variant="contained"
