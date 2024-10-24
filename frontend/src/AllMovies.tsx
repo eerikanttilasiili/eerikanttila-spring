@@ -31,7 +31,7 @@ const AllMovies = () => {
             onClick={getTodos}
             sx={{ display: 'block', margin: '0 auto', marginBottom: '2rem' }}
           >
-            Get todos!
+            Get todos Main
           </Button>
 
             <><Typography variant="body1" sx={{ textAlign: 'center', marginBottom: '2rem' }}>
