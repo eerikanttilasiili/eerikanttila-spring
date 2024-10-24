@@ -41,8 +41,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: eaxpost
-          password: Dockerpassword12!
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -63,8 +63,8 @@ jobs:
           allow-no-subscriptions: true
 
       - name: Wait before restarting the Azure Web App
-        run: sleep 30
+        run: sleep 5
 
       - name: "Restart Azure Web App"
         run: |
-          az webapp restart --name eerikanttila-webapp --resource-group ${{ secrets.AZURE_WEBAPP_RESOURCE_GROUP }}
+          az webapp restart --name ${{ secrets.AZURE_WEBAPP_RESOURCE_NAME }} --resource-group ${{ secrets.AZURE_WEBAPP_RESOURCE_GROUP }}
