@@ -62,8 +62,6 @@ jobs:
           tenant-id: 99fe1041-ba57-4f49-866b-06c297c116cc
           allow-no-subscriptions: true
 
-      - name: Print Azure Account Info
-        uses: azure/CLI@v1
-        with:
-          inlineScript: |
-            az account show
+      - name: "Restart Azure Web App"
+        run: |
+          az webapp restart --name eerikanttila-webapp --resource-group eerikanttila-sandbox-rg
