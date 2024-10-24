@@ -23,7 +23,7 @@ const AllMovies = () => {
             onClick={getMessage}
             sx={{ display: 'block', margin: '0 auto', marginBottom: '2rem' }}
           >
-            Main app!
+            Main first
           </Button>
           <Button
             variant="contained"
@@ -31,7 +31,7 @@ const AllMovies = () => {
             onClick={getTodos}
             sx={{ display: 'block', margin: '0 auto', marginBottom: '2rem' }}
           >
-            Get todos Main
+            Get todos!
           </Button>
 
             <><Typography variant="body1" sx={{ textAlign: 'center', marginBottom: '2rem' }}>
