@@ -64,4 +64,4 @@ jobs:
 
       - name: "Restart Azure Web App"
         run: |
-          az webapp restart --name eerikanttila-webapp --resource-group eerikanttila-sandbox-rg
+          az group list --query "[].name" -o table
