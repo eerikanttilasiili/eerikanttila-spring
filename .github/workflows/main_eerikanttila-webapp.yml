@@ -62,6 +62,9 @@ jobs:
           tenant-id: 99fe1041-ba57-4f49-866b-06c297c116cc
           allow-no-subscriptions: true
 
+      - name: Wait before restarting the Azure Web App
+        run: sleep 30
+
       - name: "Restart Azure Web App"
         run: |
           az webapp restart --name eerikanttila-webapp --resource-group ${{ secrets.AZURE_WEBAPP_RESOURCE_GROUP }}
