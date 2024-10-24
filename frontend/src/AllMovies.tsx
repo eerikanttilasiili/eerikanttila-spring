@@ -23,7 +23,7 @@ const AllMovies = () => {
             onClick={getMessage}
             sx={{ display: 'block', margin: '0 auto', marginBottom: '2rem' }}
           >
-            Main
+            Main 123
           </Button>
           <Button
             variant="contained"
