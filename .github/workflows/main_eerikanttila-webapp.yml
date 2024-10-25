@@ -62,9 +62,10 @@ jobs:
           tenant-id: ${{ secrets.AZURE_WEBAPP_TENANT_ID }}
           allow-no-subscriptions: true
 
-      - name: List Resource Groups
-        run: az group list --output table
+      - name: Wait before restarting the Azure Web App
+        run: sleep 30
 
       - name: "Restart Azure Web App"
         run: |
-          az webapp restart --name ${{ secrets.AZURE_WEBAPP_RESOURCE_NAME }} --resource-group ${{ secrets.AZURE_WEBAPP_RESOURCE_GROUP }}
+          az webapp restart --name ${{ secrets.AZURE_WEBAPP_RESOURCE_NAME }}
+            --resource-group ${{ secrets.AZURE_WEBAPP_RESOURCE_GROUP }}
