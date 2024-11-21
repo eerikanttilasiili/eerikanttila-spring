@@ -67,4 +67,4 @@ jobs:
 
       - name: "Restart Azure Web App"
         run: |
-          az webapp restart --name ${{ secrets.AZURE_WEBAPP_RESOURCE_NAME }} --resource-group ${{ secrets.AZURE_WEBAPP_RESOURCE_GROUP }}
+          az webapp restart --name ${{ secrets.AZURE_WEBAPP_RESOURCE_NAME }} --resource-group eerikanttila-sandbox-rg
