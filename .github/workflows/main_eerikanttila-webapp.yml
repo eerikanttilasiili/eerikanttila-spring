@@ -63,7 +63,7 @@ jobs:
           allow-no-subscriptions: true
 
       - name: Wait before restarting the Azure Web App
-        run: sleep 60
+        run: sleep 120
 
       - name: "Restart Azure Web App"
         run: |
