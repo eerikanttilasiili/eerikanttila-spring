@@ -62,16 +62,9 @@ jobs:
           tenant-id: ${{ secrets.AZURE_WEBAPP_TENANT_ID }}
           allow-no-subscriptions: true
 
-      #- name: Wait before restarting the Azure Web App
-      #  run: sleep 10
-
       - name: Set Azure Subscription
         run: |
           az account set --subscription ${{ secrets.AZURE_WEBAPP_SUBSCRIPTION_ID }}
-
-      - name: List Resource Groups in Current Subscription
-        run: |
-          az group list --output table
 
       - name: "Restart Azure Web App"
         run: |
