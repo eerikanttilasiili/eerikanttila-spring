@@ -63,8 +63,12 @@ jobs:
           allow-no-subscriptions: true
 
       - name: Wait before restarting the Azure Web App
-        run: sleep 360
+        run: sleep 10
 
-      - name: "Restart Azure Web App"
+      - name: Set Azure Subscription
         run: |
-          az webapp restart --name ${{ secrets.AZURE_WEBAPP_RESOURCE_NAME }} --resource-group eerikanttila-sandbox-rg
+          az account set --subscription 731f3bda-584f-4578-a54e-addf20109a8e
+
+      - name: List Resource Groups in Current Subscription
+        run: |
+          az group list --output table
