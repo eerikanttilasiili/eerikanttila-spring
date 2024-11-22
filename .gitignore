@@ -34,3 +34,5 @@ build/
 
 # Ignore Spring Boot resources static folder
 /src/main/resources/static/
+
+.env
