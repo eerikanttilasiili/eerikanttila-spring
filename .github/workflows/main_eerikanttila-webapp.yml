@@ -36,9 +36,7 @@ jobs:
           distribution: "adopt"
 
       - name: Build Backend with Maven
-        run: |
-          cp .env backend/.env
-          mvn clean package
+        run: mvn clean package
         env:
           SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
           SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
