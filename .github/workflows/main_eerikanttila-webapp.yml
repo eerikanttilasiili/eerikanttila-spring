@@ -72,3 +72,7 @@ jobs:
       - name: List Resource Groups in Current Subscription
         run: |
           az group list --output table
+
+      - name: "Restart Azure Web App"
+        run: |
+          az webapp restart --name ${{ secrets.AZURE_WEBAPP_RESOURCE_NAME }} --resource-group eerikanttila-sandbox-rg
