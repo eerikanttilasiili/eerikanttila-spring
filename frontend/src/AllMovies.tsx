@@ -6,11 +6,10 @@ import {
     List,
     ListItem,
     ListItemText,
-    CircularProgress,
 } from '@mui/material';
 
 const AllMovies = () => {
-    const { message, getMessage, files, getFiles, todos, getTodos } = useFileContext();
+    const { message, getMessage, files, todos, getTodos } = useFileContext();
 
     console.log('files:', files);
 
