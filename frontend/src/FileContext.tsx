@@ -84,7 +84,7 @@ export const FileContextProvider = ({ children }: { children: React.ReactNode })
             getFiles();
         }
         console.log('Files:', files);
-    }, [files]);
+    }, [files, getFiles]);
 
     return (
         <FileContext.Provider value={{ setFiles, getMessage, message, getFiles, files, getTodos, todos }}>
