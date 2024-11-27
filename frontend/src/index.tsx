@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 import {
     BrowserRouter as Router,
 } from "react-router-dom";
-import { MovieContextProvider } from './MovieContext';
+import { FileContextProvider } from './FileContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,9 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
   <Router>
-      <MovieContextProvider>
+      <FileContextProvider>
           <App />
-      </MovieContextProvider>
+      </FileContextProvider>
   </Router>
 </StrictMode>
 );
