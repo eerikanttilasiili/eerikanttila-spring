@@ -26,7 +26,7 @@ const TopBar = () => {
                 </Typography>
                 <nav>
                     <div style={{ marginTop: '10px' }}>                        
-                        <Button style={{ marginLeft: '5px' }} size="small" variant="outlined" onClick={async () => { navigate("/add"); }}>Add new</Button>
+                        <Button style={{ marginLeft: '5px' }} size="small" variant="outlined" onClick={async () => { navigate("/add"); }}>Upload</Button>
                     </div>
                 </nav>
             </Toolbar>

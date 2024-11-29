@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 type FileContextType = {
+    uploadFiles: (body: any) => Promise<void>;
     setFiles: React.Dispatch<React.SetStateAction<null | any[]>>;
     message: string;
     getMessage: () => Promise<void>;
@@ -11,6 +12,7 @@ type FileContextType = {
 };
 
 export const FileContext = createContext<FileContextType>({
+    uploadFiles: async (body: any) => {},
     setFiles: () => {},
     message: '',
     getMessage: async () => {},
@@ -27,6 +29,31 @@ export const FileContextProvider = ({ children }: { children: React.ReactNode })
     const [files, setFiles] = useState<null | any[]>(null);
     const [message, setMessage] = useState<string>('');
     const [todos, setTodos] = useState<any[]>([]);
+
+    const uploadFiles = useCallback(async (data: any) => {
+        console.log('uploadFiles: ', data)
+        
+        try {
+            const response = await fetch('/api/files/upload', {
+              method: 'POST',
+              body: data,
+            });
+      
+            if (response.ok) {
+                const responseData = await response.json(); // Parse the response as JSON
+            const filesToSet = responseData.map((file: any) => ({
+                id: file.id,
+                fileOriginalName: file.fileOriginalName,
+            }));
+
+            setFiles(files => [...files || [], ...filesToSet]);
+            } else {
+                console.error('Failed to upload files');
+            }
+            } catch (error) {
+                console.error('Error uploading files:', error);
+            }
+    }, []);
 
     const getMessage = useCallback(async () => {
         try {
@@ -83,11 +110,11 @@ export const FileContextProvider = ({ children }: { children: React.ReactNode })
         if (!files) {
             getFiles();
         }
-        console.log('Files:', files);
+        //console.log('Files:', files);
     }, [files, getFiles]);
 
     return (
-        <FileContext.Provider value={{ setFiles, getMessage, message, getFiles, files, getTodos, todos }}>
+        <FileContext.Provider value={{ uploadFiles, setFiles, getMessage, message, getFiles, files, getTodos, todos }}>
             {children}
         </FileContext.Provider>
     );

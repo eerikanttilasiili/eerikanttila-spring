@@ -46,13 +46,12 @@ public class FileController {
     }
 
     @PostMapping(value = "/upload")
-    public ResponseEntity<Object> uploadFiles(@RequestParam("name") String name,
-            @RequestParam("files") MultipartFile[] files) {
+    public ResponseEntity<Object> uploadFiles(@RequestParam("files") MultipartFile[] files) {
 
         try {
             List<FileUploadResponse> fileUploadResponses = Arrays.stream(files).map(file -> {
                 try {
-                    return fileUploadService.uploadFile(file, name);
+                    return fileUploadService.uploadFile(file);
                 } catch (IOException e) {
                     throw new UncheckedIOException(e);
                 }

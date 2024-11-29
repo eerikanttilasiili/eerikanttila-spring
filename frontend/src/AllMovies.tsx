@@ -11,7 +11,7 @@ import {
 const AllMovies = () => {
     const { message, getMessage, files, todos, getTodos } = useFileContext();
 
-    console.log('files:', files);
+    //console.log('files:', files);
 
     return (
         <Container maxWidth="md" component="main" sx={{ padding: '2rem 0' }}>
@@ -20,27 +20,17 @@ const AllMovies = () => {
                     List of files:
                     </Typography>
                     <List>
-                        {files ? (
-                            files.map((file, index) => {
-                              if (files.length) {
-                                return (
-                                  <ListItem key={index}>
-                                      <ListItemText primary={file.fileOriginalName || `File ${index + 1}`} />
-                                  </ListItem>
-                              )
-                              } else {
-                                return (
-                                  <Typography variant="body1" sx={{ textAlign: 'center', marginBottom: '2rem' }}>
-                                    No files found
-                                  </Typography>
-                              )
-                              }
-                              })
-                        ) : (
-                            <Typography variant="body1" sx={{ textAlign: 'center', marginBottom: '2rem' }}>
-                                Loading...
-                            </Typography>
-                        )}
+                    {files && !!files.length ? (
+                        files.map((file, index) => (
+                            <ListItem key={index}>
+                                <ListItemText primary={file.fileOriginalName || `File ${index + 1}`} />
+                            </ListItem>
+                        ))
+                    ) : (
+                        <Typography variant="body1" sx={{ textAlign: 'center', marginBottom: '2rem' }}>
+                            {files ? "List is empty" : "Loading..."}
+                        </Typography>
+                    )}
                     </List>                
             </div>
             <div style={{ border: '1px solid gray', borderRadius: '15px' }}>

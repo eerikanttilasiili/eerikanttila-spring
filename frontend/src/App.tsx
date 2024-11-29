@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 import './App.css';
 import AllMovies from './AllMovies'
-import AddNewComponent from './AddNewComponent'
+import UploadNewComponent from './UploadNewComponent'
 import { HomeLayout } from './HomeLayout';
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
       <Routes>
           <Route element={<HomeLayout />}>
               <Route path="/" element={<AllMovies />} />
-              <Route path="/add" element={<AddNewComponent />} />
+              <Route path="/add" element={<UploadNewComponent />} />
           </Route>
       </Routes>)
 };

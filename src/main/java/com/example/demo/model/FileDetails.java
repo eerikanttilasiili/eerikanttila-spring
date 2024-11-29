@@ -24,17 +24,14 @@ public class FileDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @JsonView(Summary.class) // Include in Summary view
+  @JsonView(Summary.class)
   private UUID id;
 
   private String fileName;
   private String fileUri;
 
-  @JsonView(Summary.class) // Include in Summary view
+  @JsonView(Summary.class)
   private String fileOriginalName;
 
   private long size;
-  private String uploaderName;
-
-  // Other methods can be added if needed
 }

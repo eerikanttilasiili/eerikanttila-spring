@@ -84,7 +84,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Override
-    public FileUploadResponse uploadFile(MultipartFile file, String uploaderName) throws IOException {
+    public FileUploadResponse uploadFile(MultipartFile file) throws IOException {
         if (!JPEG_CONTENT_TYPE.equals(file.getContentType()) && !PNG_CONTENT_TYPE.equals(file.getContentType())) {
             throw new FileNotSupportedException("Only .jpeg and .png images are supported");
         }
@@ -131,7 +131,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                 .fileOriginalName(file.getOriginalFilename())
                 .fileUri("https://eerikanttilastorage.blob.core.windows.net/uploads/" + file.getOriginalFilename())
                 .size(file.getSize())
-                .uploaderName(uploaderName)
                 .build();
 
         long fileSize = file.getSize();

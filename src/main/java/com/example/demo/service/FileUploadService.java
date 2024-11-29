@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface FileUploadService {
-  FileUploadResponse uploadFile(MultipartFile file, String uploaderName) throws IOException;
+  FileUploadResponse uploadFile(MultipartFile file) throws IOException;
 
   List<FileDetails> getAllFiles();
 
