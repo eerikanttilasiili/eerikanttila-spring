@@ -13,8 +13,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FileUploadResponse {
 	private UUID id;
-	private String fileName;
-	private String fileUri;
 	private String fileOriginalName;
-	private long size;
 }

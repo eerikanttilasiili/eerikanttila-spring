@@ -3,7 +3,7 @@ import {
   Route,
 } from "react-router-dom";
 import './App.css';
-import AllMovies from './AllMovies'
+import AllFiles from './AllFiles'
 import UploadNewComponent from './UploadNewComponent'
 import { HomeLayout } from './HomeLayout';
 
@@ -12,7 +12,7 @@ const App = () => {
   return (
       <Routes>
           <Route element={<HomeLayout />}>
-              <Route path="/" element={<AllMovies />} />
+              <Route path="/" element={<AllFiles />} />
               <Route path="/add" element={<UploadNewComponent />} />
           </Route>
       </Routes>)

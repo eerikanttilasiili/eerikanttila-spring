@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useFileContext } from "./FileContext";
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, SnackbarContent, Typography } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
 
 const UploadNewComponent = () => {
-    const { uploadFiles } = useFileContext();
+    const { uploadFiles, open, handleClose } = useFileContext();
     const [formData, setFormData] = useState({
         files: [] as File[],
     });
@@ -22,6 +23,7 @@ const UploadNewComponent = () => {
             data.append('files', file); // Use the same key for all files
         });
         uploadFiles(data);
+        setFormData({ ...formData, files: [] });
     };
 
     const removeFile = (fileName: string) => {
@@ -57,7 +59,6 @@ const UploadNewComponent = () => {
                     <div style={{minHeight: '100px', maxHeight: '100px', overflow: 'auto' }}>
                     {formData.files.length > 0 && (
                         <div>
-                            <Typography variant="h6">Selected Files:</Typography>
                             <ul>
                                 {formData.files.map((file, index) => (
                                     <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -68,7 +69,7 @@ const UploadNewComponent = () => {
                                             onClick={() => removeFile(file.name)} 
                                             sx={{ minWidth: 'auto', padding: 0 }}
                                         >
-                                            X
+                                            [X]
                                         </Button>
                                     </li>
                                 ))}
@@ -83,6 +84,24 @@ const UploadNewComponent = () => {
                 </Box>
                 </Box>
             </form>
+            <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            open={open}
+            autoHideDuration={2500}
+            onClose={handleClose}
+        >
+            <SnackbarContent
+                style={{
+                    backgroundColor: 'orange',
+                    color: 'white',
+                    padding: '5px',
+                    paddingLeft: '15px',
+                    borderRadius: '5px',
+                    fontSize: '15px',
+                }}
+                message="File(s) uploaded successfully."
+            />
+        </Snackbar>
         </Box>
     );
 };

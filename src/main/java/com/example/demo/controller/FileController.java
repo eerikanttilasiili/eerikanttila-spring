@@ -47,7 +47,6 @@ public class FileController {
 
     @PostMapping(value = "/upload")
     public ResponseEntity<Object> uploadFiles(@RequestParam("files") MultipartFile[] files) {
-
         try {
             List<FileUploadResponse> fileUploadResponses = Arrays.stream(files).map(file -> {
                 try {

@@ -32,6 +32,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
     private static final String JPEG_CONTENT_TYPE = "image/jpeg";
     private static final String PNG_CONTENT_TYPE = "image/png";
+    private static final String PDF_CONTENT_TYPE = "application/pdf";
 
     @Autowired
     private FileDetailsRepository fileDetailsRepository;
@@ -85,8 +86,9 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     @Override
     public FileUploadResponse uploadFile(MultipartFile file) throws IOException {
-        if (!JPEG_CONTENT_TYPE.equals(file.getContentType()) && !PNG_CONTENT_TYPE.equals(file.getContentType())) {
-            throw new FileNotSupportedException("Only .jpeg and .png images are supported");
+        if (!JPEG_CONTENT_TYPE.equals(file.getContentType()) && !PNG_CONTENT_TYPE.equals(file.getContentType())
+                && !PDF_CONTENT_TYPE.equals(file.getContentType())) {
+            throw new FileNotSupportedException("Only .jpeg, .png and .pdf files are supported");
         }
 
         BlobContainerClient containerClient = new BlobContainerClientBuilder()
@@ -141,10 +143,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         FileUploadResponse fileUploadResponse = FileUploadResponse.builder()
                 .id(fileDetails.getId())
-                .fileName(filenameWithTimestamp)
                 .fileOriginalName(file.getOriginalFilename())
-                .fileUri("https://eerikanttilastorage.blob.core.windows.net/uploads/" + filenameWithTimestamp)
-                .size(file.getSize())
                 .build();
 
         logger.info("File uploaded successfully: " + file.getOriginalFilename());

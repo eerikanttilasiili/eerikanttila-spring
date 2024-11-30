@@ -1,6 +1,9 @@
+import { SnackbarCloseReason } from '@mui/material';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 type FileContextType = {
+    open: boolean;
+    handleClose: (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => void
     uploadFiles: (body: any) => Promise<void>;
     setFiles: React.Dispatch<React.SetStateAction<null | any[]>>;
     message: string;
@@ -12,6 +15,8 @@ type FileContextType = {
 };
 
 export const FileContext = createContext<FileContextType>({
+    open: false,
+    handleClose: async (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {},
     uploadFiles: async (body: any) => {},
     setFiles: () => {},
     message: '',
@@ -29,10 +34,9 @@ export const FileContextProvider = ({ children }: { children: React.ReactNode })
     const [files, setFiles] = useState<null | any[]>(null);
     const [message, setMessage] = useState<string>('');
     const [todos, setTodos] = useState<any[]>([]);
+    const [open, setOpen] = useState<boolean>(false);
 
-    const uploadFiles = useCallback(async (data: any) => {
-        console.log('uploadFiles: ', data)
-        
+    const uploadFiles = useCallback(async (data: any) => {        
         try {
             const response = await fetch('/api/files/upload', {
               method: 'POST',
@@ -41,12 +45,13 @@ export const FileContextProvider = ({ children }: { children: React.ReactNode })
       
             if (response.ok) {
                 const responseData = await response.json(); // Parse the response as JSON
-            const filesToSet = responseData.map((file: any) => ({
-                id: file.id,
-                fileOriginalName: file.fileOriginalName,
-            }));
+                const filesToSet = responseData.map((file: any) => ({
+                    id: file.id,
+                    fileOriginalName: file.fileOriginalName,
+                }));
 
             setFiles(files => [...files || [], ...filesToSet]);
+            setOpen(true);
             } else {
                 console.error('Failed to upload files');
             }
@@ -106,6 +111,16 @@ export const FileContextProvider = ({ children }: { children: React.ReactNode })
         }
     }, []);
 
+    const handleClose = (
+        event: React.SyntheticEvent | Event,
+        reason?: SnackbarCloseReason,
+      ) => {
+        if (reason === 'clickaway') {
+          return;
+        }    
+        setOpen(false);
+      };
+
     useEffect(() => {
         if (!files) {
             getFiles();
@@ -114,7 +129,7 @@ export const FileContextProvider = ({ children }: { children: React.ReactNode })
     }, [files, getFiles]);
 
     return (
-        <FileContext.Provider value={{ uploadFiles, setFiles, getMessage, message, getFiles, files, getTodos, todos }}>
+        <FileContext.Provider value={{ open, handleClose, uploadFiles, setFiles, getMessage, message, getFiles, files, getTodos, todos }}>
             {children}
         </FileContext.Provider>
     );
