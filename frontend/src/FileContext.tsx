@@ -41,7 +41,6 @@ export const FileContextProvider = ({ children }: { children: React.ReactNode })
     const [message, setMessage] = useState<string>('');
     const [todos, setTodos] = useState<any[]>([]);
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
-    const [modalOpen, setModalOpen] = useState(false);
     const [fileToDelete, setFileToDelete] = useState<any>(null);
 
     const uploadFiles = useCallback(async (data: any) => {        
