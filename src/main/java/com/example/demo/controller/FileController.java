@@ -109,11 +109,14 @@ public class FileController {
         }
     }
 
-    @DeleteMapping("/{fileUuid:.+}")
+    @DeleteMapping(value = { "/{fileUuid:.+}" })
     public ResponseEntity<Object> deleteFile(@PathVariable UUID fileUuid) {
         try {
             fileUploadService.deleteBlobFile(fileUuid);
-            return ResponseEntity.ok("File deleted successfully: " + fileUuid);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+                    "success", true,
+                    "message", "File deleted successfully.",
+                    "fileUuid", fileUuid.toString()));
         } catch (FileNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                     "success", false,

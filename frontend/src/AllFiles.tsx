@@ -7,14 +7,14 @@ import {
     ListItem,
     ListItemText,
     Box,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from '@mui/material';
 
 const AllMovies = () => {
-    const { message, getMessage, files, todos, getTodos } = useFileContext();
-
-    const deleteFile = (fileUuid: string) => {
-        console.log('fileUuid: ', fileUuid);
-    };
+    const { message, getMessage, files, todos, getTodos, deleteFile, fileToDelete, setFileToDelete } = useFileContext();
 
     return (
         <Container maxWidth="md" component="main" sx={{ padding: '2rem 0' }}>
@@ -32,7 +32,7 @@ const AllMovies = () => {
                                     <Button
                                         variant="outlined"
                                         color="primary"
-                                        onClick={() => {deleteFile(file.id)}}
+                                        onClick={() => {setFileToDelete(file)}}
                                         sx={{ fontSize: '10px', padding: '4px', margin: '0px', marginLeft: '10px' }}
                                     >
                                         Remove
@@ -57,7 +57,7 @@ const AllMovies = () => {
                     onClick={getMessage}
                     sx={{ display: 'block', margin: '0 auto', marginBottom: '2rem' }}
                 >
-                    Main
+                    Main message
                 </Button>
                 <Button
                     variant="contained"
@@ -75,6 +75,53 @@ const AllMovies = () => {
                     {JSON.stringify(todos)}
                 </Typography>
             </div>
+            <Dialog 
+                open={fileToDelete ? true : false} 
+                onClose={() => {setFileToDelete(null)}}
+                sx={{
+                    '& .MuiDialog-paper': {
+                    padding: 2,
+                    borderRadius: 2,
+                    backgroundColor: '#f5f5f5',
+                    }
+                }}
+                >
+                <DialogTitle sx={{ fontWeight: 'bold', color: '#1976d2' }}>Confirm Deletion</DialogTitle>
+                <DialogContent>
+                    <Typography sx={{ fontSize: '1rem', color: '#333' }}>
+                    Are you sure you want to delete?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button 
+                    onClick={() => {setFileToDelete(null)}}
+                    color="primary" 
+                    sx={{
+                        textTransform: 'none',
+                        color: '#1976d2',
+                        '&:hover': {
+                        backgroundColor: '#e3f2fd',
+                        }
+                    }}
+                    >
+                    Cancel
+                    </Button>
+                    <Button 
+                    onClick={() => {deleteFile(fileToDelete)}}
+                    color="primary" 
+                    variant="contained" 
+                    sx={{
+                        textTransform: 'none',
+                        backgroundColor: '#1976d2',
+                        '&:hover': {
+                        backgroundColor: '#1565c0',
+                        }
+                    }}
+                    >
+                    Confirm
+                    </Button>
+                </DialogActions>
+                </Dialog>
         </Container>
     );
 };

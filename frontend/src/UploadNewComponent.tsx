@@ -4,7 +4,8 @@ import { Box, Button, SnackbarContent, Typography } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 
 const UploadNewComponent = () => {
-    const { uploadFiles, open, handleClose } = useFileContext();
+    const { uploadFiles, snackbarOpen, handleSnackbarClose } = useFileContext();
+
     const [formData, setFormData] = useState({
         files: [] as File[],
     });
@@ -86,9 +87,9 @@ const UploadNewComponent = () => {
             </form>
             <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={open}
+            open={snackbarOpen}
             autoHideDuration={2500}
-            onClose={handleClose}
+            onClose={handleSnackbarClose}
         >
             <SnackbarContent
                 style={{
